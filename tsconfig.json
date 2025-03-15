@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",          // Usa CommonJS para la salida compilada
+    "target": "ES6",               // Compila a ES6 (permite sintaxis moderna de JavaScript)
+    "moduleResolution": "node",    // Resuelve los módulos de acuerdo con la resolución de módulos de Node.js
+    "esModuleInterop": true,       // Permite interoperabilidad entre módulos CommonJS y ES6
+    "outDir": "./dist",            // Carpeta de salida para los archivos compilados
+    "rootDir": "./src",            // Carpeta raíz donde están los archivos fuente
+    "strict": true,                // Habilita el modo estricto para mejores comprobaciones
+    "skipLibCheck": true,          // Evita la comprobación de archivos de definición de tipo
+    "resolveJsonModule": true      // Permite importar archivos JSON como módulos
+  },
+  "include": [
+    "src/**/*.ts"                  // Incluye todos los archivos TypeScript en el directorio src
+  ],
+  "exclude": [
+    "node_modules"                 // Excluye la carpeta node_modules
+  ]
+}

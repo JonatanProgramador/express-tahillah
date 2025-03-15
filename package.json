@@ -1,0 +1,21 @@
+{
+  "name": "express-tahillah",
+  "version": "1.0.0",
+  "main": "dist/init.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "copile": "tsc --watch",
+    "start": "node --watch dist/init.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
