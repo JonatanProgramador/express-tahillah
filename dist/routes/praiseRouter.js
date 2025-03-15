@@ -1,14 +1,18 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+const praiseController_1 = __importDefault(require("../controllers/praiseController"));
 class PraiseRouter {
     static getRoutes() {
         const router = (0, express_1.Router)();
-        router.get('/', (req, res) => { res.send("Recuperando todas las alabanzas"); });
-        router.get('/:id', (req, res) => { res.send("Recuperando una alabanza"); });
-        router.post('/', (req, res) => { res.send("Creando una alabanza"); });
-        router.patch('/:id', (req, res) => { res.send("Actualizando parcialmente una alabanza"); });
-        router.delete('/:id', (req, res) => { res.send("Eliminando una alabanza"); });
+        router.get('/', praiseController_1.default.getAll);
+        router.get('/:id', praiseController_1.default.getById);
+        router.post('/', praiseController_1.default.create);
+        router.patch('/:id', praiseController_1.default.update);
+        router.delete('/:id', praiseController_1.default.delete);
         return router;
     }
 }

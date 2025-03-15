@@ -3,10 +3,9 @@ import PraiseRouter from "./praiseRouter";
 
 class Router {
 
-    static getRoutes(app: Application): Application {
+    static getRoutes(app: Application): void {
         app.use('/praise', PraiseRouter.getRoutes());
         app.use('**', (req: Request, res: Response) => { res.status(404).send("Pagina no encontrada") });
-        return app;
     }
     
 }
