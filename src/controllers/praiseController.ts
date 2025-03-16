@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 
 class PraiseController {
 
-    static getAll(req:Request, res:Response):void {
+    static async getAll(req:Request, res:Response):Promise<void> {
         res.send("Recuperando todas las alabanzas");
     }
 

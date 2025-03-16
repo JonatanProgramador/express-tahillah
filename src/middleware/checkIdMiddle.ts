@@ -4,7 +4,7 @@ interface RouteMiddlInterface {url:string, method:string};
 
 class CheckIdMiddle {
 
-    private static routes:RouteMiddlInterface[] = [
+    private static readonly routes:RouteMiddlInterface[] = [
         {url:'/praise/:id', method:'get'},
         {url:'/praise/:id', method:'patch'},
         {url:'/praise/:id', method:'delete'},

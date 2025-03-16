@@ -5,7 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "copile": "tsc --watch",
-    "start": "node --watch dist/init.js"
+    "start": "node --watch dist/init.js",
+    "migrate": "node dist/database/migrations/migrate.js"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +17,7 @@
     "typescript": "^5.8.2"
   },
   "dependencies": {
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "mysql2": "^3.13.0"
   }
 }
