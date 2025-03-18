@@ -8,6 +8,7 @@ const env_1 = __importDefault(require("./env"));
 const router_1 = __importDefault(require("./routes/router"));
 const middleware_1 = __importDefault(require("./middleware/middleware"));
 const app = (0, express_1.default)();
+app.use(express_1.default.json()); //cambiar a configuracion
 middleware_1.default.addMiddleware(app);
 router_1.default.getRoutes(app);
 const serverMessage = "Servidor iniciado...";
