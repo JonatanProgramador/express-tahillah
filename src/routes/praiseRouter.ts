@@ -10,7 +10,7 @@ class PraiseRouter {
         router.get('/:id', PraiseController.getById);
         router.post('/', PraiseController.create);
         router.patch('/:id', PraiseController.update);
-        router.delete('/:id',PraiseController.delete);
+        router.delete('/:id',PraiseController.delete); 
     
         return router;
     }

@@ -1,8 +1,6 @@
-import { object } from "zod";
 import PraiseInterface from "../interfaces/praiseInterface";
 import ColumnSql from "../libs/columnSql";
 import MySql from "../libs/mySql";
-import PraiseRequest from "../request/praiseRequest";
 
 
 class PraiseModel {
