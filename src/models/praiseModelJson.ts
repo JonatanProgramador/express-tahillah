@@ -20,6 +20,7 @@ class PraiseModelJson {
     static async createRow(input:PraiseInterface):Promise<boolean> {
         const data = await Json.readJson('praises.json');
         const praises:Array<PraiseInterface> = JSON.parse(data);
+        input.id = praises.length+1;
         praises.push(input);
         return await Json.writeJson('praises.json', JSON.stringify(praises));
     }
@@ -28,6 +29,10 @@ class PraiseModelJson {
         const data = await Json.readJson('praises.json');
         const praises:Array<PraiseInterface> = JSON.parse(data);
         const newPraises:Array<PraiseInterface> = praises.filter((praise:PraiseInterface)=>praise.id !== id);
+        const orderPraises:Array<PraiseInterface> = newPraises.map((praise:PraiseInterface, index)=>{
+            praise.id = index+1;
+            return praise;
+        })
         return await Json.writeJson('praises.json', JSON.stringify(newPraises));
     }
 

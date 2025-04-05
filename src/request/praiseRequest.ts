@@ -23,10 +23,6 @@ class PraiseRequest {
   })
 
   static readonly praiseSchema = Zod.object({
-    id: Zod.number({
-      invalid_type_error: "Tipo invalido",
-      required_error: "Campo requerido"
-    }),
     title: Zod.string({
       invalid_type_error: "Tipo invalido",
       required_error: "Campo requerido"
@@ -40,7 +36,7 @@ class PraiseRequest {
       required_error: "Campo requerido"
     }),
 
-    letter: Zod.array(this.letterSchema),
+    letters: Zod.array(this.letterSchema),
   });
 
   static validate(obj: Object) {

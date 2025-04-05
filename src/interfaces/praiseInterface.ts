@@ -5,7 +5,7 @@ interface PraiseInterface {
     title:string,
     type:string,
     tone:string,
-    letter:LetterInterface[]
+    letters:LetterInterface[]
 };
 
 export default PraiseInterface;

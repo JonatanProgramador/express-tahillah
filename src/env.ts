@@ -8,7 +8,7 @@ interface env {
 };
 
 const ENV:env = {
-    host: '192.168.1.99',
+    host: 'localhost',
     port: 3000,
     path: path.resolve(__dirname),
     configDB: {

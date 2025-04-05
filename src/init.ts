@@ -6,7 +6,7 @@ import cors from 'cors';
 
 const app:Application = express();
 app.use(cors({
-    origin: `http://192.168.1.99:5173`,  
+    origin: `http://localhost:5173`,  
     methods:['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
   }))
 app.use(express.json()); //cambiar a configuracion
