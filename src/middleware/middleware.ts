@@ -4,7 +4,7 @@ import CheckIdMiddle from "./checkIdMiddle";
 class Middleware {
 
     static addMiddleware(app:Application) {
-        CheckIdMiddle.addMiddleware(app);
+        //CheckIdMiddle.addMiddleware(app);
     }
 }
 

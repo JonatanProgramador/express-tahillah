@@ -1,22 +1,28 @@
 import path from "node:path";
 
 interface env {
-    host:string,
-    port:number,
-    path:string
-    configDB:object
+    host: string,
+    port: number,
+    path: string
+    configDB: {
+        host: string,
+        user: string,
+        port: number,
+        password: string,
+        database: string
+    }
 };
 
-const ENV:env = {
+const ENV: env = {
     host: 'localhost',
     port: 3000,
     path: path.resolve(__dirname),
     configDB: {
-        host: 'localhost',
+        host: '127.0.0.1',
         user: 'root',
-        port: 3306,
+        port: 27017,
         password: '',
-        database: 'pruebas'
+        database: 'tahillah'
     }
 };
 

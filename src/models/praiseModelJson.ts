@@ -10,36 +10,32 @@ class PraiseModelJson {
         return  JSON.parse(data);
     }
 
-    static async getById(id:number):Promise<PraiseInterface> {
+    static async getById(id:string):Promise<PraiseInterface> {
         const data = await Json.readJson('praises.json');
         const praises:Array<PraiseInterface> = JSON.parse(data);
-        const row:PraiseInterface = praises.find((praise:PraiseInterface)=>praise.id === id) as PraiseInterface;
+        const row:PraiseInterface = praises.find((praise:PraiseInterface)=>praise._id === id) as PraiseInterface;
         return row;
     }
 
     static async createRow(input:PraiseInterface):Promise<boolean> {
         const data = await Json.readJson('praises.json');
         const praises:Array<PraiseInterface> = JSON.parse(data);
-        input.id = praises.length+1;
+        input._id = crypto.randomUUID();
         praises.push(input);
         return await Json.writeJson('praises.json', JSON.stringify(praises));
     }
 
-    static async deleteRow(id:number):Promise<boolean> {
+    static async deleteRow(id:string):Promise<boolean> {
         const data = await Json.readJson('praises.json');
         const praises:Array<PraiseInterface> = JSON.parse(data);
-        const newPraises:Array<PraiseInterface> = praises.filter((praise:PraiseInterface)=>praise.id !== id);
-        const orderPraises:Array<PraiseInterface> = newPraises.map((praise:PraiseInterface, index)=>{
-            praise.id = index+1;
-            return praise;
-        })
+        const newPraises:Array<PraiseInterface> = praises.filter((praise:PraiseInterface)=>praise._id !== id);
         return await Json.writeJson('praises.json', JSON.stringify(newPraises));
     }
 
-    static async updateRow(input:PraiseInterface, id:number):Promise<boolean> {
+    static async updateRow(input:PraiseInterface, id:string):Promise<boolean> {
         const data = await Json.readJson('praises.json');
         const praises:Array<PraiseInterface> = JSON.parse(data);
-        const newPraises:Array<PraiseInterface> = praises.map((praise:PraiseInterface)=>praise.id === id?{...praise,...input}:praise);
+        const newPraises:Array<PraiseInterface> = praises.map((praise:PraiseInterface)=>praise._id === id?{...praise,...input}:praise);
         return await Json.writeJson('praises.json', JSON.stringify(newPraises));
     }
 }
