@@ -21,10 +21,10 @@ app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.json());
 AddMiddleware_1.default.add(app);
 Router_1.default.getRoutes(app);
-if (process.env.DEVELOP) {
+if (process.env.DEVELOP === "true") {
     const serverMessage = `Servidor iniciado en ${process.env.HOST}:${process.env.PORT}`;
     app.listen(process.env.PORT ? Number.parseInt(process.env.PORT) : 3000, (_a = process.env.HOST) !== null && _a !== void 0 ? _a : "", () => { console.log(serverMessage); });
 }
 else {
-    app.listen(process.env.PORT ? Number.parseInt(process.env.PORT) : 3000, () => { });
+    app.listen(process.env.PORT ? Number.parseInt(process.env.PORT) : 3000, () => { console.log("Modo producion"); });
 }

@@ -21,9 +21,9 @@ app.use(express.json());
 AddMiddleware.add(app);
 Router.getRoutes(app);
 
-if (process.env.DEVELOP) {
+if (process.env.DEVELOP === "true") {
   const serverMessage = `Servidor iniciado en ${process.env.HOST}:${process.env.PORT}`;
   app.listen(process.env.PORT ? Number.parseInt(process.env.PORT) : 3000, process.env.HOST??"", () => { console.log(serverMessage); });
 } else {
-  app.listen(process.env.PORT ? Number.parseInt(process.env.PORT) : 3000, () => { });
+  app.listen(process.env.PORT ? Number.parseInt(process.env.PORT) : 3000, () => {console.log("Modo producion")});
 }
