@@ -16,6 +16,11 @@ class SessionController {
         }
     }
 
+        static async getById(req: Request, res: Response): Promise<void> {
+                    const row = await SessionModel.getById(req.params.id);
+                    res.json(row);
+                }
+
 }
 
 export default SessionController;

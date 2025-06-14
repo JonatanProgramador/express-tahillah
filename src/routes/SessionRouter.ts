@@ -8,6 +8,7 @@ class SessionRouter {
         const router = Router();
     
         router.post('/', SessionController.create);
+        router.get('/:id', SessionController.getById);
       
         return router;
     }

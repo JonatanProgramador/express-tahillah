@@ -28,5 +28,11 @@ class SessionController {
             }
         });
     }
+    static getById(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const row = yield SessionModel_1.default.getById(req.params.id);
+            res.json(row);
+        });
+    }
 }
 exports.default = SessionController;

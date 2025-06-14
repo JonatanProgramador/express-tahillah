@@ -9,6 +9,7 @@ class SessionRouter {
     static getRoutes() {
         const router = (0, express_1.Router)();
         router.post('/', SessionController_1.default.create);
+        router.get('/:id', SessionController_1.default.getById);
         return router;
     }
 }

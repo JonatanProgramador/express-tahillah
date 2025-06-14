@@ -25,6 +25,21 @@ class SessionModel {
             }
         }
 
+        static async getById(id:string):Promise<SessionInterface|null> {
+                try{
+                    await mongoose.connect(process.env.CLUSTER??"");
+                    const model = mongoose.model(this.collection, this.sessionSchema);
+                    const result:SessionInterface|null = await model.findById(id);
+                    mongoose.disconnect();
+                    return result;
+                    } catch(error) {
+                        console.log(error);
+                        return null;
+                    }
+            }
+
+        
+
 }
 
 export default SessionModel;

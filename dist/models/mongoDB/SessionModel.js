@@ -60,6 +60,22 @@ class SessionModel {
             }
         });
     }
+    static getById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var _a;
+            try {
+                yield mongoose_1.default.connect((_a = process.env.CLUSTER) !== null && _a !== void 0 ? _a : "");
+                const model = mongoose_1.default.model(this.collection, this.sessionSchema);
+                const result = yield model.findById(id);
+                mongoose_1.default.disconnect();
+                return result;
+            }
+            catch (error) {
+                console.log(error);
+                return null;
+            }
+        });
+    }
 }
 SessionModel.sessionSchema = new mongoose_1.Schema({
     idUser: String,
