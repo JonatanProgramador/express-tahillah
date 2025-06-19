@@ -73,6 +73,9 @@ class UserController {
                     res.status(400).send("Error al pasar los datos");
                 }
             }
+            else {
+                res.status(400).send("Error al pasar los datos");
+            }
         });
     }
     static isLogin(req, res) {

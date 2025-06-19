@@ -56,6 +56,8 @@ class UserController {
             } else {
                 res.status(400).send("Error al pasar los datos");
             }
+        } else {
+            res.status(400).send("Error al pasar los datos");
         }
     }
 

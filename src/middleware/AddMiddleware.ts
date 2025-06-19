@@ -1,14 +1,10 @@
 import { Application } from "express";
-import CheckIdMiddle from "./CheckIdMiddle";
-import ProtectedMiddle from "./ProtectedMiddle";
-import RolMiddle from "./RolMiddle";
+import SecurityLevelsMiddle from "./SecurityLevelsMiddle";
 
 class AddMiddleware {
 
     static add(app:Application) {
-        //new CheckIdMiddle(app);
-        new ProtectedMiddle(app);
-        new RolMiddle(app);
+        new SecurityLevelsMiddle(app);
     }
 }
 

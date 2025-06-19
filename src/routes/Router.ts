@@ -1,15 +1,25 @@
 import { Application, Request, Response } from "express";
-import PraiseRouter from "./PraiseRouter";
-import UserRouter from "./UserRouter";
-import SessionRouter from "./SessionRouter";
+import Routers from "./Routers";
 
 class Router {
 
     static getRoutes(app: Application): void {
-        app.use("/", UserRouter.getRoutes());
-        app.use('/praise', PraiseRouter.getRoutes());
-        app.use('/session', SessionRouter.getRoutes());
-        app.use('**', (req: Request, res: Response) => { res.status(404).send("Pagina no encontrada") });
+        Routers.forEach((value) =>{
+            switch (value.method) {
+                case 'get':
+                    app.get(value.url, value.callBack);
+                    break;
+                case 'post':
+                    app.post(value.url, value.callBack);
+                    break;
+                case 'patch':
+                    app.patch(value.url, value.callBack);
+                    break;
+                case 'delete':
+                    app.delete(value.url, value.callBack);
+                    break;
+            }
+        });
     }
     
 }
