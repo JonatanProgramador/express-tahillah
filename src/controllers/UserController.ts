@@ -63,16 +63,7 @@ class UserController {
 
     static async isLogin(req: Request, res: Response) {
         const cookie = req.cookies.token;
-        if (cookie) {
-            try {
-                const data = jwt.verify(cookie, process.env.KEY_JWT ?? "");
-                res.send("true");
-            } catch (error) {
-                res.send("false");
-            }
-        } else {
-            res.send("false");
-        }
+        res.send(""+req.body.levelUser)
     }
 
     static async logout(req: Request, res: Response) {

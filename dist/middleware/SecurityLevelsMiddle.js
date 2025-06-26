@@ -54,6 +54,7 @@ class SecurityLevelsMiddle extends Middleware_1.default {
         }
         const levelRoute = route ? route.securityLevel : 0;
         //comprobamos si tiene suficiente nivel para poder acceder a la ruta
+        req.body.levelUser = levelUser;
         levelUser >= levelRoute ? next() : res.status(401).send("No tienes permisos");
     }
 }

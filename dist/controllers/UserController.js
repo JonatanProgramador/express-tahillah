@@ -80,20 +80,8 @@ class UserController {
     }
     static isLogin(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            var _a;
             const cookie = req.cookies.token;
-            if (cookie) {
-                try {
-                    const data = jsonwebtoken_1.default.verify(cookie, (_a = process.env.KEY_JWT) !== null && _a !== void 0 ? _a : "");
-                    res.send("true");
-                }
-                catch (error) {
-                    res.send("false");
-                }
-            }
-            else {
-                res.send("false");
-            }
+            res.send("" + req.body.levelUser);
         });
     }
     static logout(req, res) {
