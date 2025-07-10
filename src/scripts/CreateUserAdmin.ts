@@ -7,8 +7,8 @@ import dotenv from "dotenv";
 async function createUserAdmin() {
 
     const user = {
-        name:"battusay",
-        password:await bcrypt.hash("04Battu0287",10),
+        name:"",
+        password:await bcrypt.hash("",10),
         rol:"admin"
     };
 

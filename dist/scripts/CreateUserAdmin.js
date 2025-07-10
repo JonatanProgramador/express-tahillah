@@ -18,8 +18,8 @@ const dotenv_1 = __importDefault(require("dotenv"));
 function createUserAdmin() {
     return __awaiter(this, void 0, void 0, function* () {
         const user = {
-            name: "battusay",
-            password: yield bcrypt_1.default.hash("04Battu0287", 10),
+            name: "",
+            password: yield bcrypt_1.default.hash("", 10),
             rol: "admin"
         };
         const result = yield UserModel_1.default.createRow(user);
