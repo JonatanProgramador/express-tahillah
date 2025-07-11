@@ -76,6 +76,11 @@ class SessionModel {
             }
         });
     }
+    static exists(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return (yield this.getById(id)) === null ? false : true;
+        });
+    }
 }
 SessionModel.sessionSchema = new mongoose_1.Schema({
     idUser: String,

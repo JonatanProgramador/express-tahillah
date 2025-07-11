@@ -20,14 +20,16 @@ class SecurityLevelsMiddle extends Middleware {
 
     private checkLevels(req: Request, res: Response, next: NextFunction): void {
  
-        //recuperamos el rol del token
+        //recuperamos el rol del token y la id del usuario
         const cookie = req.cookies.token;
 
         let token = "";
+        let idUser = "";
         if (cookie) {
             try {
-                const data = jwt.verify(cookie, process.env.KEY_JWT ?? "") as { _doc: { rol: string } };
+                const data = jwt.verify(cookie, process.env.KEY_JWT ?? "") as { _doc: { rol: string, _id:string } };
                 token = data._doc.rol;
+                idUser = data._doc._id;
             } catch (error) { }
         }
 
@@ -62,6 +64,7 @@ class SecurityLevelsMiddle extends Middleware {
 
         //comprobamos si tiene suficiente nivel para poder acceder a la ruta
         req.body.levelUser = levelUser;
+        req.body.idUser = idUser;
         levelUser >= levelRoute?next():res.status(401).send("No tienes permisos");
     }
 

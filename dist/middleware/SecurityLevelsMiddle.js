@@ -18,13 +18,15 @@ class SecurityLevelsMiddle extends Middleware_1.default {
     }
     checkLevels(req, res, next) {
         var _a;
-        //recuperamos el rol del token
+        //recuperamos el rol del token y la id del usuario
         const cookie = req.cookies.token;
         let token = "";
+        let idUser = "";
         if (cookie) {
             try {
                 const data = jsonwebtoken_1.default.verify(cookie, (_a = process.env.KEY_JWT) !== null && _a !== void 0 ? _a : "");
                 token = data._doc.rol;
+                idUser = data._doc._id;
             }
             catch (error) { }
         }
@@ -55,6 +57,7 @@ class SecurityLevelsMiddle extends Middleware_1.default {
         const levelRoute = route ? route.securityLevel : 0;
         //comprobamos si tiene suficiente nivel para poder acceder a la ruta
         req.body.levelUser = levelUser;
+        req.body.idUser = idUser;
         levelUser >= levelRoute ? next() : res.status(401).send("No tienes permisos");
     }
 }

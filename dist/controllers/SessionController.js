@@ -20,8 +20,13 @@ class SessionController {
             const sessionValidate = SessionRequest_1.default.validate(req.body);
             if (sessionValidate.success) {
                 const newSession = sessionValidate.data;
-                const result = yield SessionModel_1.default.createRow(newSession);
-                result ? res.status(201).send("Se ha creado la sesión") : res.status(500).send("Error al crear el usuario");
+                if (yield SessionModel_1.default.exists(newSession.idUser)) {
+                    const result = yield SessionModel_1.default.createRow(newSession);
+                    result ? res.status(201).send("Se ha creado la sesión") : res.status(500).send("Error al crear el usuario");
+                }
+                else {
+                    res.status(400).send("El usuario ya tiene una sesión creada");
+                }
             }
             else {
                 res.status(400).send("Error al pasar los datos");

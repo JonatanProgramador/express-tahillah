@@ -5,12 +5,17 @@ import SessionModel from "../models/mongoDB/SessionModel";
 
 
 class SessionController {
+
     static async create(req: Request, res: Response): Promise<void> {
         const sessionValidate = SessionRequest.validate(req.body);
         if (sessionValidate.success) {
             const newSession = sessionValidate.data as SessionInterface;
+            if(await SessionModel.exists(newSession.idUser)) {
                 const result = await SessionModel.createRow(newSession);
                 result ? res.status(201).send("Se ha creado la sesión") : res.status(500).send("Error al crear el usuario");
+            } else {
+                res.status(400).send("El usuario ya tiene una sesión creada");
+            }
         } else {
             res.status(400).send("Error al pasar los datos");
         }
