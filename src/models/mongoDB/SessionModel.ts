@@ -42,6 +42,19 @@ class SessionModel {
         return await this.getById(id) === null ? false : true;
     }
 
+    //TODO. puedo eliminar esta funcion ya que en getAll usa el mismo codigo.
+        static async find(key:string, value:string, precise:boolean): Promise<SessionInterface[]> {
+            try {
+                await mongoose.connect(process.env.CLUSTER??"");
+                const model = mongoose.model(this.collection, this.sessionSchema);
+                const result:SessionInterface[] = await model.find({[key]:precise?value:{$regex:value, $options: "i"}});
+                mongoose.disconnect();
+                return  result;
+            } catch(error) {
+                return [];
+            }
+        }
+
 }
 
 export default SessionModel;

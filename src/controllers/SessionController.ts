@@ -26,6 +26,11 @@ class SessionController {
                     res.json(row);
                 }
 
+         static async searchByUser(req: Request, res: Response): Promise<void> {
+                    const row = await SessionModel.find("idUser", req.body.idUser, true);
+                    res.json(row[0]);
+                }
+
 }
 
 export default SessionController;

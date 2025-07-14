@@ -39,5 +39,11 @@ class SessionController {
             res.json(row);
         });
     }
+    static searchByUser(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const row = yield SessionModel_1.default.find("idUser", req.body.idUser, true);
+            res.json(row[0]);
+        });
+    }
 }
 exports.default = SessionController;

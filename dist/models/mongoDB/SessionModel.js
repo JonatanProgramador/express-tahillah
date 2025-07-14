@@ -81,6 +81,22 @@ class SessionModel {
             return (yield this.getById(id)) === null ? false : true;
         });
     }
+    //TODO. puedo eliminar esta funcion ya que en getAll usa el mismo codigo.
+    static find(key, value, precise) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var _a;
+            try {
+                yield mongoose_1.default.connect((_a = process.env.CLUSTER) !== null && _a !== void 0 ? _a : "");
+                const model = mongoose_1.default.model(this.collection, this.sessionSchema);
+                const result = yield model.find({ [key]: precise ? value : { $regex: value, $options: "i" } });
+                mongoose_1.default.disconnect();
+                return result;
+            }
+            catch (error) {
+                return [];
+            }
+        });
+    }
 }
 SessionModel.sessionSchema = new mongoose_1.Schema({
     idUser: String,
