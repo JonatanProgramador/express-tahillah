@@ -10,7 +10,7 @@ class SessionController {
         const sessionValidate = SessionRequest.validate(req.body);
         if (sessionValidate.success) {
             const newSession = sessionValidate.data as SessionInterface;
-            if(await SessionModel.exists(newSession.idUser)) {
+            if(!await SessionModel.exists(newSession.idUser)) {
                 const result = await SessionModel.createRow(newSession);
                 result ? res.status(201).send("Se ha creado la sesión") : res.status(500).send("Error al crear el usuario");
             } else {
@@ -28,7 +28,7 @@ class SessionController {
 
          static async searchByUser(req: Request, res: Response): Promise<void> {
                     const row = await SessionModel.find("idUser", req.body.idUser, true);
-                    res.json(row[0]);
+                    row.length > 0?res.json(row[0]):res.status(404).send();
                 }
 
 }

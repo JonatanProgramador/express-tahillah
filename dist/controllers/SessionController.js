@@ -20,7 +20,7 @@ class SessionController {
             const sessionValidate = SessionRequest_1.default.validate(req.body);
             if (sessionValidate.success) {
                 const newSession = sessionValidate.data;
-                if (yield SessionModel_1.default.exists(newSession.idUser)) {
+                if (!(yield SessionModel_1.default.exists(newSession.idUser))) {
                     const result = yield SessionModel_1.default.createRow(newSession);
                     result ? res.status(201).send("Se ha creado la sesión") : res.status(500).send("Error al crear el usuario");
                 }
@@ -42,7 +42,7 @@ class SessionController {
     static searchByUser(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const row = yield SessionModel_1.default.find("idUser", req.body.idUser, true);
-            res.json(row[0]);
+            row.length > 0 ? res.json(row[0]) : res.status(404).send();
         });
     }
 }
