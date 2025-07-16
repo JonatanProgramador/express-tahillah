@@ -15,6 +15,10 @@ class SessionRequest {
         static validate(obj: Object) {
             return this.sessionSchema.safeParse(obj);
         }
+
+        static validatePartial(obj: Object) {
+    return this.sessionSchema.partial().safeParse(obj);
+  }
 }
 
 export default SessionRequest;

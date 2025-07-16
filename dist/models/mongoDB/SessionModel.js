@@ -78,7 +78,7 @@ class SessionModel {
     }
     static exists(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return (yield this.getById(id)) === null ? false : true;
+            return (yield this.find("idUser", id, true)).length > 0 ? true : false;
         });
     }
     //TODO. puedo eliminar esta funcion ya que en getAll usa el mismo codigo.
@@ -93,6 +93,22 @@ class SessionModel {
                 return result;
             }
             catch (error) {
+                return [];
+            }
+        });
+    }
+    static updateRow(session, id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var _a;
+            try {
+                yield mongoose_1.default.connect((_a = process.env.CLUSTER) !== null && _a !== void 0 ? _a : "");
+                const model = mongoose_1.default.model(this.collection, this.sessionSchema);
+                const result = yield model.findByIdAndUpdate(id, session);
+                mongoose_1.default.disconnect();
+                return result;
+            }
+            catch (error) {
+                console.log(error);
                 return [];
             }
         });

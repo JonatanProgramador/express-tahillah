@@ -39,7 +39,7 @@ class SessionModel {
     }
 
     static async exists(id: string) {
-        return await this.getById(id) === null ? false : true;
+        return  (await this.find("idUser", id, true)).length>0  ? true : false;
     }
 
     //TODO. puedo eliminar esta funcion ya que en getAll usa el mismo codigo.
@@ -54,6 +54,19 @@ class SessionModel {
                 return [];
             }
         }
+
+        static async updateRow(session:SessionInterface, id:string) {
+                try{
+                    await mongoose.connect(process.env.CLUSTER??"");
+                    const model = mongoose.model(this.collection, this.sessionSchema);
+                    const result = await model.findByIdAndUpdate(id, session);
+                    mongoose.disconnect();
+                    return result;
+                    } catch(error) {
+                        console.log(error);
+                        return [];
+                    }
+            }
 
 }
 

@@ -8,6 +8,9 @@ class SessionRequest {
     static validate(obj) {
         return this.sessionSchema.safeParse(obj);
     }
+    static validatePartial(obj) {
+        return this.sessionSchema.partial().safeParse(obj);
+    }
 }
 SessionRequest.sessionSchema = zod_1.default.object({
     idUser: zod_1.default.string({

@@ -45,5 +45,23 @@ class SessionController {
             row.length > 0 ? res.json(row[0]) : res.status(404).send();
         });
     }
+    static update(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const validateRow = SessionRequest_1.default.validate(req.body);
+            if (validateRow.success) {
+                if (yield SessionModel_1.default.exists(validateRow.data.idUser)) {
+                    const idSession = yield SessionModel_1.default.find("idUser", validateRow.data.idUser, true);
+                    const updateRow = yield SessionModel_1.default.updateRow(validateRow.data, idSession[0]._id);
+                    res.send(updateRow ? "Se ha actualizado" : "No se ha podido actualizar");
+                }
+                else {
+                    res.status(404).send("No se ha encontrado la sesión");
+                }
+            }
+            else {
+                res.status(400).send("datos invalidos");
+            }
+        });
+    }
 }
 exports.default = SessionController;
