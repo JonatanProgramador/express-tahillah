@@ -46,16 +46,13 @@ const mongoose_1 = __importStar(require("mongoose"));
 class UserModel {
     static createRow(user) {
         return __awaiter(this, void 0, void 0, function* () {
-            var _a;
             try {
                 if (!user.rol) {
                     console.log("rol vacio asignandole un valor por defecto");
                     user.rol = "user";
                 }
-                yield mongoose_1.default.connect((_a = process.env.CLUSTER) !== null && _a !== void 0 ? _a : "");
                 const model = mongoose_1.default.model(this.collection, this.userSchema);
                 const result = yield model.create(user);
-                mongoose_1.default.disconnect();
                 return result._id && result._id.toString() ? true : false;
             }
             catch (error) {
@@ -66,12 +63,9 @@ class UserModel {
     }
     static exists(name) {
         return __awaiter(this, void 0, void 0, function* () {
-            var _a;
             try {
-                yield mongoose_1.default.connect((_a = process.env.CLUSTER) !== null && _a !== void 0 ? _a : "");
                 const model = mongoose_1.default.model(this.collection, this.userSchema);
                 const result = yield model.find({ name: name });
-                mongoose_1.default.disconnect();
                 return result.length > 0;
             }
             catch (error) {
@@ -81,12 +75,11 @@ class UserModel {
     }
     static findByName(name) {
         return __awaiter(this, void 0, void 0, function* () {
-            var _a;
             try {
-                yield mongoose_1.default.connect((_a = process.env.CLUSTER) !== null && _a !== void 0 ? _a : "");
+                //  await mongoose.connect(process.env.CLUSTER??"");
                 const model = mongoose_1.default.model(this.collection, this.userSchema);
                 const result = yield model.find({ name: name });
-                mongoose_1.default.disconnect();
+                //  mongoose.disconnect();
                 return result[0];
             }
             catch (error) {

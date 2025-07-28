@@ -47,12 +47,9 @@ const mongoose_1 = __importStar(require("mongoose"));
 class PraiseModel {
     static createRow(praise) {
         return __awaiter(this, void 0, void 0, function* () {
-            var _b;
             try {
-                yield mongoose_1.default.connect((_b = process.env.CLUSTER) !== null && _b !== void 0 ? _b : "");
                 const model = mongoose_1.default.model(this.collection, this.praiseSchema);
                 const result = yield model.create(praise);
-                mongoose_1.default.disconnect();
                 return result._id.toString() !== '';
             }
             catch (error) {
@@ -62,12 +59,9 @@ class PraiseModel {
     }
     static getAll() {
         return __awaiter(this, void 0, void 0, function* () {
-            var _b;
             try {
-                yield mongoose_1.default.connect((_b = process.env.CLUSTER) !== null && _b !== void 0 ? _b : "");
                 const model = mongoose_1.default.model(this.collection, this.praiseSchema);
                 const result = yield model.find();
-                mongoose_1.default.disconnect();
                 return result;
             }
             catch (error) {
@@ -79,12 +73,9 @@ class PraiseModel {
     }
     static getById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            var _b;
             try {
-                yield mongoose_1.default.connect((_b = process.env.CLUSTER) !== null && _b !== void 0 ? _b : "");
                 const model = mongoose_1.default.model(this.collection, this.praiseSchema);
                 const result = yield model.findById(id);
-                mongoose_1.default.disconnect();
                 return result;
             }
             catch (error) {
@@ -95,12 +86,9 @@ class PraiseModel {
     }
     static deleteRow(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            var _b;
             try {
-                yield mongoose_1.default.connect((_b = process.env.CLUSTER) !== null && _b !== void 0 ? _b : "");
                 const model = mongoose_1.default.model(this.collection, this.praiseSchema);
                 const result = yield model.findByIdAndDelete(id);
-                mongoose_1.default.disconnect();
                 return result;
             }
             catch (error) {
@@ -111,12 +99,9 @@ class PraiseModel {
     }
     static updateRow(praise, id) {
         return __awaiter(this, void 0, void 0, function* () {
-            var _b;
             try {
-                yield mongoose_1.default.connect((_b = process.env.CLUSTER) !== null && _b !== void 0 ? _b : "");
                 const model = mongoose_1.default.model(this.collection, this.praiseSchema);
                 const result = yield model.findByIdAndUpdate(id, praise);
-                mongoose_1.default.disconnect();
                 return result;
             }
             catch (error) {
@@ -128,12 +113,9 @@ class PraiseModel {
     //TODO. puedo eliminar esta funcion ya que en getAll usa el mismo codigo.
     static find(key, value, precise) {
         return __awaiter(this, void 0, void 0, function* () {
-            var _b;
             try {
-                yield mongoose_1.default.connect((_b = process.env.CLUSTER) !== null && _b !== void 0 ? _b : "");
                 const model = mongoose_1.default.model(this.collection, this.praiseSchema);
                 const result = yield model.find({ [key]: precise ? value : { $regex: value, $options: "i" } });
-                mongoose_1.default.disconnect();
                 return result;
             }
             catch (error) {

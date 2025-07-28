@@ -18,10 +18,8 @@ class UserModel {
                 console.log("rol vacio asignandole un valor por defecto");
                 user.rol = "user";
             }
-            await mongoose.connect(process.env.CLUSTER??"");
             const model = mongoose.model(this.collection, this.userSchema);
             const result = await model.create(user);
-            mongoose.disconnect();
             return result._id && result._id.toString() ? true : false;
         } catch (error) {
             console.log(error);
@@ -31,10 +29,8 @@ class UserModel {
 
     static async exists(name: string) {
         try {
-            await mongoose.connect(process.env.CLUSTER??"");
             const model = mongoose.model(this.collection, this.userSchema);
             const result = await model.find({ name: name });
-            mongoose.disconnect();
             return result.length > 0;
         } catch (error) {
             return false;
@@ -43,10 +39,10 @@ class UserModel {
 
     static async findByName(name: string): Promise<UserInterface | undefined> {
         try {
-            await mongoose.connect(process.env.CLUSTER??"");
+          //  await mongoose.connect(process.env.CLUSTER??"");
             const model = mongoose.model(this.collection, this.userSchema);
             const result: UserInterface[] = await model.find({ name: name });
-            mongoose.disconnect();
+          //  mongoose.disconnect();
             return result[0];
         } catch (error) {
             return undefined;

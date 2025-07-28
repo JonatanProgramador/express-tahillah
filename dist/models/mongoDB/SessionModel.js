@@ -46,12 +46,9 @@ const mongoose_1 = __importStar(require("mongoose"));
 class SessionModel {
     static createRow(session) {
         return __awaiter(this, void 0, void 0, function* () {
-            var _a;
             try {
-                yield mongoose_1.default.connect((_a = process.env.CLUSTER) !== null && _a !== void 0 ? _a : "");
                 const model = mongoose_1.default.model(this.collection, this.sessionSchema);
                 const result = yield model.create(session);
-                mongoose_1.default.disconnect();
                 return result._id && result._id.toString() ? true : false;
             }
             catch (error) {
@@ -62,12 +59,9 @@ class SessionModel {
     }
     static getById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            var _a;
             try {
-                yield mongoose_1.default.connect((_a = process.env.CLUSTER) !== null && _a !== void 0 ? _a : "");
                 const model = mongoose_1.default.model(this.collection, this.sessionSchema);
                 const result = yield model.findById(id);
-                mongoose_1.default.disconnect();
                 return result;
             }
             catch (error) {
@@ -84,12 +78,9 @@ class SessionModel {
     //TODO. puedo eliminar esta funcion ya que en getAll usa el mismo codigo.
     static find(key, value, precise) {
         return __awaiter(this, void 0, void 0, function* () {
-            var _a;
             try {
-                yield mongoose_1.default.connect((_a = process.env.CLUSTER) !== null && _a !== void 0 ? _a : "");
                 const model = mongoose_1.default.model(this.collection, this.sessionSchema);
                 const result = yield model.find({ [key]: precise ? value : { $regex: value, $options: "i" } });
-                mongoose_1.default.disconnect();
                 return result;
             }
             catch (error) {
@@ -99,17 +90,34 @@ class SessionModel {
     }
     static updateRow(session, id) {
         return __awaiter(this, void 0, void 0, function* () {
-            var _a;
             try {
-                yield mongoose_1.default.connect((_a = process.env.CLUSTER) !== null && _a !== void 0 ? _a : "");
                 const model = mongoose_1.default.model(this.collection, this.sessionSchema);
                 const result = yield model.findByIdAndUpdate(id, session);
-                mongoose_1.default.disconnect();
                 return result;
             }
             catch (error) {
                 console.log(error);
                 return [];
+            }
+        });
+    }
+    static listenSession(io) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log("Ejecutado");
+                const model = mongoose_1.default.model(this.collection, this.sessionSchema);
+                const event = model.watch();
+                event.on("change", (change) => {
+                    const idSession = change.documentKey._id.toString();
+                    const idPraise = change.updateDescription.updatedFields.idPraise;
+                    io.emit(idSession, idPraise);
+                });
+                event.on('error', (err) => {
+                    console.error("Error en el Change Stream:", err);
+                });
+            }
+            catch (error) {
+                console.log(error);
             }
         });
     }
