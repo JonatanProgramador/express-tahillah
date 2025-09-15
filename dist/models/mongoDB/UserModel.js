@@ -41,8 +41,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
+const MongoDB_1 = __importDefault(require("../../libs/MongoDB"));
 class UserModel {
     static createRow(user) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -56,7 +60,11 @@ class UserModel {
                 return result._id && result._id.toString() ? true : false;
             }
             catch (error) {
-                console.log(error);
+                if (error instanceof mongoose_1.mongo.MongoServerSelectionError) {
+                    console.log("No hay conexión");
+                    if (MongoDB_1.default.reconnectDB === null)
+                        MongoDB_1.default.init();
+                }
                 return false;
             }
         });
@@ -69,21 +77,29 @@ class UserModel {
                 return result.length > 0;
             }
             catch (error) {
-                return false;
+                if (error instanceof mongoose_1.mongo.MongoServerSelectionError) {
+                    console.log("No hay conexión");
+                    if (MongoDB_1.default.reconnectDB === null)
+                        MongoDB_1.default.init();
+                }
+                return null;
             }
         });
     }
     static findByName(name) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                //  await mongoose.connect(process.env.CLUSTER??"");
                 const model = mongoose_1.default.model(this.collection, this.userSchema);
                 const result = yield model.find({ name: name });
-                //  mongoose.disconnect();
                 return result[0];
             }
             catch (error) {
-                return undefined;
+                if (error instanceof mongoose_1.mongo.MongoServerSelectionError) {
+                    console.log("No hay conexión");
+                    if (MongoDB_1.default.reconnectDB === null)
+                        MongoDB_1.default.init();
+                }
+                return null;
             }
         });
     }

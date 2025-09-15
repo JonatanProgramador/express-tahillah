@@ -41,8 +41,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
+const mongoose_2 = require("mongoose");
+const MongoDB_1 = __importDefault(require("../../libs/MongoDB"));
 class SessionModel {
     static createRow(session) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -65,14 +70,19 @@ class SessionModel {
                 return result;
             }
             catch (error) {
-                console.log(error);
-                return null;
+                if (error instanceof mongoose_1.default.Error.CastError)
+                    return 404;
+                return 500;
             }
         });
     }
     static exists(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return (yield this.find("idUser", id, true)).length > 0 ? true : false;
+            const result = yield this.find("idUser", id, true);
+            if (result !== null)
+                return result.length > 0 ? true : false;
+            else
+                return null;
         });
     }
     //TODO. puedo eliminar esta funcion ya que en getAll usa el mismo codigo.
@@ -84,7 +94,7 @@ class SessionModel {
                 return result;
             }
             catch (error) {
-                return [];
+                return null;
             }
         });
     }
@@ -93,11 +103,15 @@ class SessionModel {
             try {
                 const model = mongoose_1.default.model(this.collection, this.sessionSchema);
                 const result = yield model.findByIdAndUpdate(id, session);
-                return result;
+                return true;
             }
             catch (error) {
-                console.log(error);
-                return [];
+                if (error instanceof mongoose_2.mongo.MongoServerSelectionError) {
+                    console.log("No hay conexión");
+                    if (MongoDB_1.default.reconnectDB === null)
+                        MongoDB_1.default.init();
+                }
+                return false;
             }
         });
     }
@@ -113,11 +127,14 @@ class SessionModel {
                     io.emit(idSession, idPraise);
                 });
                 event.on('error', (err) => {
-                    console.error("Error en el Change Stream:", err);
                 });
             }
             catch (error) {
-                console.log(error);
+                if (error instanceof mongoose_2.mongo.MongoServerSelectionError) {
+                    console.log("No hay conexión");
+                    if (MongoDB_1.default.reconnectDB === null)
+                        MongoDB_1.default.init();
+                }
             }
         });
     }

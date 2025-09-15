@@ -23,13 +23,14 @@ class UserController {
             const userValidate = UserRequest_1.default.validate(req.body);
             if (userValidate.success) {
                 const newUser = userValidate.data;
-                if (!(yield UserModel_1.default.exists(newUser.name))) {
+                const existsUser = yield UserModel_1.default.exists(newUser.name);
+                if (!existsUser) {
                     newUser.password = yield bcrypt_1.default.hash(newUser.password, 10);
                     const result = yield UserModel_1.default.createRow(newUser);
-                    result ? res.status(201).send("Se ha creado el usuario") : res.status(500).send("Error al crear el usuario");
+                    result ? res.status(201).send("Se ha creado el usuario") : res.status(500).send("Error en el servidor");
                 }
                 else {
-                    res.status(400).send("El nombre ya existe");
+                    existsUser === null ? res.status(500).send("Error en el servidor") : res.status(409).send("El nombre ya existe");
                 }
             }
             else {
@@ -45,7 +46,8 @@ class UserController {
                 const passwordUser = atob(req.headers.authorization.slice(6)).split(":")[1];
                 const loginData = UserRequest_1.default.validate({ name: nameUser, password: passwordUser });
                 if (loginData.success) {
-                    if (yield UserModel_1.default.exists(loginData.data.name)) {
+                    const existsUser = yield UserModel_1.default.exists(loginData.data.name);
+                    if (existsUser) {
                         const user = yield UserModel_1.default.findByName(loginData.data.name);
                         if (user) {
                             if (yield bcrypt_1.default.compare(loginData.data.password, user.password)) {
@@ -58,7 +60,7 @@ class UserController {
                                 }).json({ message: "Login correcto" });
                             }
                             else {
-                                res.status(401).send("Error en la contraseña");
+                                res.status(401).send("Error en la autentificación");
                             }
                         }
                         else {
@@ -66,7 +68,7 @@ class UserController {
                         }
                     }
                     else {
-                        res.status(401).send("Error en el usuario");
+                        existsUser === null ? res.status(500).send("Error en el servidor") : res.status(401).send("Error en la autentificación");
                     }
                 }
                 else {

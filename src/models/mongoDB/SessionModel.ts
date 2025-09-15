@@ -1,6 +1,8 @@
 import mongoose, { Schema } from "mongoose";
 import SessionInterface from "../../interfaces/SessionInterface";
 import { Server } from "socket.io";
+import { mongo } from "mongoose";
+import MongoDB from "../../libs/MongoDB";
 
 
 class SessionModel {
@@ -23,29 +25,33 @@ class SessionModel {
         }
     }
 
-    static async getById(id: string): Promise<SessionInterface | null> {
+    static async getById(id: string): Promise<SessionInterface | null | Number> {
         try {
             const model = mongoose.model(this.collection, this.sessionSchema);
             const result: SessionInterface | null = await model.findById(id);
             return result;
         } catch (error) {
-            console.log(error);
-            return null;
+            if (error instanceof mongoose.Error.CastError) return 404;
+            return 500;
         }
     }
 
     static async exists(id: string) {
-        return (await this.find("idUser", id, true)).length > 0 ? true : false;
+        const result = await this.find("idUser", id, true);
+        if (result !== null)
+            return result.length > 0 ? true : false;
+        else
+            return null;
     }
 
     //TODO. puedo eliminar esta funcion ya que en getAll usa el mismo codigo.
-    static async find(key: string, value: string, precise: boolean): Promise<SessionInterface[]> {
+    static async find(key: string, value: string, precise: boolean): Promise<SessionInterface[] | null> {
         try {
             const model = mongoose.model(this.collection, this.sessionSchema);
             const result: SessionInterface[] = await model.find({ [key]: precise ? value : { $regex: value, $options: "i" } });
             return result;
         } catch (error) {
-            return [];
+            return null;
         }
     }
 
@@ -53,14 +59,17 @@ class SessionModel {
         try {
             const model = mongoose.model(this.collection, this.sessionSchema);
             const result = await model.findByIdAndUpdate(id, session);
-            return result;
+            return true;
         } catch (error) {
-            console.log(error);
-            return [];
+            if (error instanceof mongo.MongoServerSelectionError) {
+                console.log("No hay conexión");
+                if (MongoDB.reconnectDB === null) MongoDB.init();
+            }
+            return false;
         }
     }
 
-    static async listenSession(io:Server) {
+    static async listenSession(io: Server) {
         try {
             console.log("Ejecutado")
             const model = mongoose.model(this.collection, this.sessionSchema);
@@ -72,11 +81,14 @@ class SessionModel {
             })
 
             event.on('error', (err) => {
-                console.error("Error en el Change Stream:", err);
+
             });
 
         } catch (error) {
-            console.log(error);
+            if (error instanceof mongo.MongoServerSelectionError) {
+                console.log("No hay conexión");
+                if (MongoDB.reconnectDB === null) MongoDB.init();
+            }
         }
     }
 

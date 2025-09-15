@@ -12,9 +12,9 @@ class SessionController {
             const newSession = sessionValidate.data as SessionInterface;
             if (!await SessionModel.exists(newSession.idUser)) {
                 const result = await SessionModel.createRow(newSession);
-                result ? res.status(201).send("Se ha creado la sesión") : res.status(500).send("Error al crear el usuario");
+                result ? res.status(201).send("Se ha creado la sesión") : res.status(500).send("Error en el servidor");
             } else {
-                res.status(400).send("El usuario ya tiene una sesión creada");
+                res.status(409).send("El usuario ya tiene una sesión creada");
             }
         } else {
             res.status(400).send("Error al pasar los datos");
@@ -23,12 +23,24 @@ class SessionController {
 
     static async getById(req: Request, res: Response): Promise<void> {
         const row = await SessionModel.getById(req.params.id);
-        res.json(row);
+        switch (row) {
+            case 404:
+                res.status(404).send("No se ha encontrado resultados");
+                break;
+            case 500:
+                res.status(500).send("Error en el servidor");
+                break;
+            default:
+                res.json(row);
+        };
     }
 
     static async searchByUser(req: Request, res: Response): Promise<void> {
         const row = await SessionModel.find("idUser", req.body.idUser, true);
-        row.length > 0 ? res.json(row[0]) : res.status(404).send();
+        if (row !== null)
+            row.length > 0 ? res.json(row[0]) : res.status(404).send("No se ha encontrado resultados");
+        else
+            res.status(500).send("Error en el servidor");
     }
 
     static async update(req: Request, res: Response): Promise<void> {
@@ -36,10 +48,14 @@ class SessionController {
         if (validateRow.success) {
             if (await SessionModel.exists(validateRow.data.idUser)) {
                 const idSession = await SessionModel.find("idUser", validateRow.data.idUser, true);
-                const updateRow = await SessionModel.updateRow(validateRow.data as SessionInterface, idSession[0]._id);
-                res.send(updateRow ? "Se ha actualizado" : "No se ha podido actualizar");
+                if (idSession !== null) {
+                    const updateRow = await SessionModel.updateRow(validateRow.data as SessionInterface, idSession[0]._id);
+                    updateRow ? res.send("Se ha actualizado") : res.status(500).send("Error en el servidor");
+                } else {
+                    res.status(500).send("Error en el servidor");
+                }
             } else {
-                res.status(404).send("No se ha encontrado la sesión");
+                res.status(404).send("No se ha encontrado resultados");
             }
         } else {
             res.status(400).send("datos invalidos");

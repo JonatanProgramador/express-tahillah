@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["jest", "node"],
     "module": "CommonJS",          // Usa CommonJS para la salida compilada
     "target": "ES6",               // Compila a ES6 (permite sintaxis moderna de JavaScript)
     "moduleResolution": "node",    // Resuelve los módulos de acuerdo con la resolución de módulos de Node.js

@@ -6,21 +6,30 @@ import SearchRequest from "../request/SearchRequest";
 
 class PraiseController {
 
-    static async  getAll(req: Request, res: Response): Promise<void> {
+    static async getAll(req: Request, res: Response): Promise<void> {
         const rows = await PraiseModel.getAll();
-        res.json(rows);
+        rows ? res.json(rows) : res.status(500).send("Error en el servidor");
     }
 
-     static async getById(req: Request, res: Response): Promise<void> {
+    static async getById(req: Request, res: Response): Promise<void> {
         const row = await PraiseModel.getById(req.params.id);
-        res.json(row);
+        switch (row) {
+            case 404:
+                res.status(404).send("No se ha encontrado resultados");
+                break;
+            case 500:
+                res.status(500).send("Error en el servidor");
+                break;
+            default:
+                res.json(row);
+        };
     }
 
     static async create(req: Request, res: Response): Promise<void> {
         const praiseValidate = PraiseRequest.validate(req.body);
         if (praiseValidate.success) {
             const praise = await PraiseModel.createRow(praiseValidate.data as PraiseInterface);
-            res.send(praise ? "Alabanza creada" : "No se a podido crear la alabanza");
+            praise ? res.send("Se ha creado una alabanza") : res.status(500).send("Error en el servidor");
         } else {
             res.status(400).send("datos invalidos");
         }
@@ -29,18 +38,34 @@ class PraiseController {
 
     static async delete(req: Request, res: Response): Promise<void> {
         const rowDelete = await PraiseModel.deleteRow(req.params.id);
-        if (rowDelete) {
-            res.send("Se ha eliminado la alabanza");
-        } else {
-            res.status(400).send("No se a podido eliminar la alabanza");
+        switch (rowDelete) {
+            case 200:
+                res.send("Se ha eliminado la albanza");
+                break;
+            case 404:
+                res.status(404).send("No se ha encontrado resultados");
+                break;
+            default:
+                res.status(500).send("Error del servidor");
+                break;
         }
     }
 
     static async update(req: Request, res: Response): Promise<void> {
         const validateRow = PraiseRequest.validatePartial(req.body);
-        if(validateRow.success) {
+        if (validateRow.success) {
             const updateRow = await PraiseModel.updateRow(validateRow.data as PraiseInterface, req.params.id);
-            res.send(updateRow ? "Alabanza se ha actualizado" : "No se ha podido actualizar");
+            switch (updateRow) {
+                case 200:
+                    res.send("Se ha actualizado la albanza");
+                    break;
+                case 404:
+                    res.status(404).send("No se ha encontrado resultados");
+                    break;
+                default:
+                    res.status(500).send("Error del servidor");
+                    break;
+            }
         } else {
             res.status(400).send("datos invalidos");
         }
@@ -48,16 +73,16 @@ class PraiseController {
 
     static async search(req: Request, res: Response): Promise<void> {
         const validate = SearchRequest.validate(req.body);
-        if(validate.success) {
+        if (validate.success) {
             const praises = await PraiseModel.find(validate.data.key, validate.data.value, validate.data.precise);
-            res.json(praises);
+            praises===null?res.status(500).send("Error en el servidor"):res.json(praises);
         } else {
             res.status(400).send("datos invalidos");
         }
 
     }
 
-     
+
 
 }
 

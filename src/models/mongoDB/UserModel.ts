@@ -1,5 +1,6 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { mongo, Schema } from "mongoose";
 import UserInterface from "../../interfaces/UserInterface";
+import MongoDB from "../../libs/MongoDB";
 
 
 class UserModel {
@@ -22,7 +23,10 @@ class UserModel {
             const result = await model.create(user);
             return result._id && result._id.toString() ? true : false;
         } catch (error) {
-            console.log(error);
+            if (error instanceof mongo.MongoServerSelectionError) {
+                console.log("No hay conexión");
+                if (MongoDB.reconnectDB === null) MongoDB.init();
+            }
             return false;
         }
     }
@@ -33,19 +37,26 @@ class UserModel {
             const result = await model.find({ name: name });
             return result.length > 0;
         } catch (error) {
-            return false;
+            if (error instanceof mongo.MongoServerSelectionError) {
+                console.log("No hay conexión");
+                if (MongoDB.reconnectDB === null) MongoDB.init();
+            }
+            return null;
         }
     }
 
-    static async findByName(name: string): Promise<UserInterface | undefined> {
+
+    static async findByName(name: string): Promise<UserInterface | null> {
         try {
-          //  await mongoose.connect(process.env.CLUSTER??"");
             const model = mongoose.model(this.collection, this.userSchema);
             const result: UserInterface[] = await model.find({ name: name });
-          //  mongoose.disconnect();
             return result[0];
         } catch (error) {
-            return undefined;
+            if (error instanceof mongo.MongoServerSelectionError) {
+                console.log("No hay conexión");
+                if (MongoDB.reconnectDB === null) MongoDB.init();
+            }
+            return null;
         }
     }
 }
