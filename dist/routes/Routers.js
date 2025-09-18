@@ -21,6 +21,7 @@ const Routers = [
     { url: '/session/:id', method: 'get', callBack: SessionController_1.default.getById, securityLevel: 0 },
     //Rutas de usuario
     { url: '/register', method: 'post', callBack: UserController_1.default.create, securityLevel: 3 },
+    { url: '/users', method: 'get', callBack: UserController_1.default.getAll, securityLevel: 3 },
     { url: '/login', method: 'get', callBack: UserController_1.default.login, securityLevel: 0 },
     { url: '/islogin', method: 'get', callBack: UserController_1.default.isLogin, securityLevel: 0 },
     { url: '/logout', method: 'get', callBack: UserController_1.default.logout, securityLevel: 1 },

@@ -25,8 +25,8 @@ class SecurityLevelsMiddle extends Middleware_1.default {
         if (cookie) {
             try {
                 const data = jsonwebtoken_1.default.verify(cookie, (_a = process.env.KEY_JWT) !== null && _a !== void 0 ? _a : "");
-                token = data._doc.rol;
-                idUser = data._doc._id;
+                token = data.rol;
+                idUser = data._id;
             }
             catch (error) { }
         }

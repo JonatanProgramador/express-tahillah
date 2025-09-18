@@ -18,6 +18,12 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const UserResourcer_1 = __importDefault(require("../resourcers/UserResourcer"));
 class UserController {
+    static getAll(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const rows = yield UserModel_1.default.getAll();
+            rows ? res.json(UserResourcer_1.default.format(rows)) : res.status(500).send("Error en el servidor");
+        });
+    }
     static create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const userValidate = UserRequest_1.default.validate(req.body);
@@ -51,7 +57,7 @@ class UserController {
                         const user = yield UserModel_1.default.findByName(loginData.data.name);
                         if (user) {
                             if (yield bcrypt_1.default.compare(loginData.data.password, user.password)) {
-                                const token = jsonwebtoken_1.default.sign(Object.assign({}, UserResourcer_1.default.format(user)), (_a = process.env.KEY_JWT) !== null && _a !== void 0 ? _a : "", { expiresIn: '1h' });
+                                const token = jsonwebtoken_1.default.sign(Object.assign({}, UserResourcer_1.default.format([user])[0]), (_a = process.env.KEY_JWT) !== null && _a !== void 0 ? _a : "", { expiresIn: '1h' });
                                 res.cookie('token', token, {
                                     httpOnly: true,
                                     sameSite: process.env.DEVELOP === "true" ? "strict" : "none",

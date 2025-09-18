@@ -27,12 +27,11 @@ class SecurityLevelsMiddle extends Middleware {
         let idUser = "";
         if (cookie) {
             try {
-                const data = jwt.verify(cookie, process.env.KEY_JWT ?? "") as { _doc: { rol: string, _id:string } };
-                token = data._doc.rol;
-                idUser = data._doc._id;
+                const data = jwt.verify(cookie, process.env.KEY_JWT ?? "") as {  rol: string, _id:string  };
+                token = data.rol;
+                idUser = data._id;
             } catch (error) { }
         }
-
 
         // recuperamos el nivel de seguridad de ese rol
          let levelUser = 0;

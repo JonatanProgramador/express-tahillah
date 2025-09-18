@@ -9,8 +9,12 @@ interface UserInterfaceResourcer {
 
 class UserResourcer {
 
-    static format(user: UserInterface) {
-        return user as UserInterfaceResourcer;
+    static format(user: UserInterface[]) {
+        const formatUsers:UserInterfaceResourcer[] = [];
+        user.forEach(e => {
+            formatUsers.push({_id:e._id, name:e.name, rol:e.rol});
+        });
+        return formatUsers;
     }
 
 }

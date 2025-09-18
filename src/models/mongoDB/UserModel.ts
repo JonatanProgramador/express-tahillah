@@ -13,6 +13,20 @@ class UserModel {
 
     private static readonly collection = 'users';
 
+   static async getAll(): Promise<UserInterface[]|null> {
+        try {
+            const model = mongoose.model(this.collection, this.userSchema);
+            const result: UserInterface[] = await model.find();
+            return result;
+        } catch (error) {
+            if(error instanceof mongo.MongoServerSelectionError) {
+                console.log("No hay conexión");
+                if(MongoDB.reconnectDB === null)MongoDB.init();
+            }
+            return null;
+        }
+    }
+
     static async createRow(user: UserInterface): Promise<boolean> {
         try {
             if (!user.rol) {

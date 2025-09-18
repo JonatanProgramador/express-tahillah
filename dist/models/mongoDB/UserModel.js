@@ -48,6 +48,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const MongoDB_1 = __importDefault(require("../../libs/MongoDB"));
 class UserModel {
+    static getAll() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const model = mongoose_1.default.model(this.collection, this.userSchema);
+                const result = yield model.find();
+                return result;
+            }
+            catch (error) {
+                if (error instanceof mongoose_1.mongo.MongoServerSelectionError) {
+                    console.log("No hay conexión");
+                    if (MongoDB_1.default.reconnectDB === null)
+                        MongoDB_1.default.init();
+                }
+                return null;
+            }
+        });
+    }
     static createRow(user) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

@@ -9,6 +9,11 @@ import UserResourcer from "../resourcers/UserResourcer";
 
 class UserController {
 
+    static async getAll(req: Request, res: Response) {
+        const rows = await UserModel.getAll();
+        rows ? res.json(UserResourcer.format(rows)) : res.status(500).send("Error en el servidor");
+    }
+
     static async create(req: Request, res: Response): Promise<void> {
         const userValidate = UserRequest.validate(req.body);
         if (userValidate.success) {
@@ -40,7 +45,7 @@ class UserController {
                     const user = await UserModel.findByName(loginData.data.name);
                     if (user) {
                         if (await bcrypt.compare(loginData.data.password, user.password)) {
-                            const token = jwt.sign({ ...UserResourcer.format(user) }, process.env.KEY_JWT ?? "", { expiresIn: '1h' });
+                            const token = jwt.sign({ ...UserResourcer.format([user])[0] }, process.env.KEY_JWT ?? "", { expiresIn: '1h' });
                             res.cookie('token', token, {
                                 httpOnly: true,
                                 sameSite: process.env.DEVELOP === "true" ? "strict" : "none",
