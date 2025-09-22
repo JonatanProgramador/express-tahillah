@@ -18,6 +18,22 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const UserResourcer_1 = __importDefault(require("../resourcers/UserResourcer"));
 class UserController {
+    static delete(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const rowDelete = yield UserModel_1.default.delete(req.params.id);
+            switch (rowDelete) {
+                case 200:
+                    res.send("Se ha eliminado el usuario");
+                    break;
+                case 404:
+                    res.status(404).send("No se ha encontrado resultados");
+                    break;
+                default:
+                    res.status(500).send("Error del servidor");
+                    break;
+            }
+        });
+    }
     static getAll(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const rows = yield UserModel_1.default.getAll();

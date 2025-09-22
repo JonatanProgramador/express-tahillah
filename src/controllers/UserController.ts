@@ -9,6 +9,21 @@ import UserResourcer from "../resourcers/UserResourcer";
 
 class UserController {
 
+    static async delete(req: Request, res: Response) {
+        const rowDelete = await UserModel.delete(req.params.id);
+        switch (rowDelete) {
+            case 200:
+                res.send("Se ha eliminado el usuario");
+                break;
+            case 404:
+                res.status(404).send("No se ha encontrado resultados");
+                break;
+            default:
+                res.status(500).send("Error del servidor");
+                break;
+        }
+    }
+
     static async getAll(req: Request, res: Response) {
         const rows = await UserModel.getAll();
         rows ? res.json(UserResourcer.format(rows)) : res.status(500).send("Error en el servidor");

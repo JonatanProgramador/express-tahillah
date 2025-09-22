@@ -21,6 +21,7 @@ const Routers = [
 
     //Rutas de usuario
     { url: '/register', method: 'post', callBack: UserController.create, securityLevel: 3 },
+    { url: '/deleteUser/:id', method: 'delete', callBack: UserController.delete, securityLevel: 3 },
     { url: '/users', method: 'get', callBack: UserController.getAll, securityLevel: 3 },
     { url: '/login', method: 'get', callBack: UserController.login, securityLevel: 0},
     { url: '/islogin', method: 'get', callBack: UserController.isLogin, securityLevel: 0 },

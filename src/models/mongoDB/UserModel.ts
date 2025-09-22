@@ -13,6 +13,22 @@ class UserModel {
 
     private static readonly collection = 'users';
 
+    static async delete(id:String) {
+         try {
+            const model = mongoose.model(this.collection, this.userSchema);
+            const result = await model.findByIdAndDelete(id);
+            console.log(result);
+            return result?200:404;
+        } catch (error) {
+             if(error instanceof mongo.MongoServerSelectionError) {
+                console.log("No hay conexión");
+                if(MongoDB.reconnectDB === null)MongoDB.init();
+            }
+             if(error instanceof mongoose.Error.CastError) return 404;
+            return 500;
+        }
+    }
+
    static async getAll(): Promise<UserInterface[]|null> {
         try {
             const model = mongoose.model(this.collection, this.userSchema);
