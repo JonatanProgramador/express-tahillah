@@ -43,7 +43,7 @@ class PraiseController {
             const praiseValidate = PraiseRequest_1.default.validate(req.body);
             if (praiseValidate.success) {
                 const praise = yield PraiseModel_1.default.createRow(praiseValidate.data);
-                praise ? res.send("Se ha creado una alabanza") : res.status(500).send("Error en el servidor");
+                praise ? res.status(201).json(praise) : res.status(500).send("Error en el servidor");
             }
             else {
                 res.status(400).send("datos invalidos");
@@ -69,7 +69,7 @@ class PraiseController {
     static update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const validateRow = PraiseRequest_1.default.validatePartial(req.body);
-            if (validateRow.success) {
+            if (validateRow.success && Object.keys(validateRow.data).length !== 0) {
                 const updateRow = yield PraiseModel_1.default.updateRow(validateRow.data, req.params.id);
                 switch (updateRow) {
                     case 200:

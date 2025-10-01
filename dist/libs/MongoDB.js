@@ -15,14 +15,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const SessionModel_1 = __importDefault(require("../models/mongoDB/SessionModel"));
 const socket_io_1 = require("socket.io");
-const init_1 = __importDefault(require("../init"));
+const http_1 = __importDefault(require("http"));
+const server_1 = __importDefault(require("../server"));
 class MongoDB {
     static init() {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("Iniciado conexion db");
             const isConnectDB = yield MongoDB.connectDB();
             if (isConnectDB)
-                yield MongoDB.startListers(init_1.default);
+                yield MongoDB.startListers(server_1.default);
         });
     }
     static connectDB() {
@@ -45,15 +46,21 @@ class MongoDB {
             }
         });
     }
-    static startListers(app) {
+    static desconnectDB() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield mongoose_1.default.disconnect();
+        });
+    }
+    static startListers(server) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("se ha conectado a la db, iniciando listers");
+            const app = http_1.default.createServer(server);
             const io = new socket_io_1.Server(app, {
                 cors: {
                     origin: process.env.ORIGIN_CORS,
                 }
             });
-            yield SessionModel_1.default.listenSession(io);
+            yield SessionModel_1.default.listenSession(app);
         });
     }
 }

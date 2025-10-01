@@ -12,19 +12,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const MongoDB_1 = __importDefault(require("../libs/MongoDB"));
 const UserModel_1 = __importDefault(require("../models/mongoDB/UserModel"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const dotenv_1 = __importDefault(require("dotenv"));
 function createUserAdmin() {
     return __awaiter(this, void 0, void 0, function* () {
         const user = {
             name: "",
-            password: yield bcrypt_1.default.hash("", 10),
+            password: "",
             rol: "admin"
         };
-        const result = yield UserModel_1.default.createRow(user);
-        console.log(result ? "Usuario admin creado" : "Error al crear el usuario admin");
+        if (process.argv[2] && process.argv[3]) {
+            yield MongoDB_1.default.connectDB();
+            user.name = process.argv[2];
+            user.password = yield bcrypt_1.default.hash(process.argv[3], 10);
+            const result = yield UserModel_1.default.createRow(user);
+            console.log(result ? "Usuario admin creado" : "Error al crear el usuario admin");
+            yield MongoDB_1.default.desconnectDB();
+        }
+        else {
+            console.log("Error en los parametros");
+        }
     });
 }
-dotenv_1.default.config();
 createUserAdmin();

@@ -19,7 +19,7 @@ class SecurityLevelsMiddle extends Middleware {
     }
 
     private checkLevels(req: Request, res: Response, next: NextFunction): void {
- 
+
         //recuperamos el rol del token y la id del usuario
         const cookie = req.cookies.token;
 
@@ -50,9 +50,8 @@ class SecurityLevelsMiddle extends Middleware {
                 break;
 
         }
-
         //recuperamos el nivel de seguridad de la ruta
-          let route = Routers.find((value) => req.path.toLocaleLowerCase() === value.url.toLocaleLowerCase());
+          let route = Routers.find((value) => req.path.toLocaleLowerCase() === value.url.toLocaleLowerCase() && req.method.toLocaleLowerCase() === value.method.toLocaleLowerCase());
         if (route === undefined) {
             const id = req.path.split("/").pop();
             Routers.forEach((value) => {

@@ -1,8 +1,8 @@
 import mongoose, { Schema } from "mongoose";
 import SessionInterface from "../../interfaces/SessionInterface";
-import { Server } from "socket.io";
 import { mongo } from "mongoose";
 import MongoDB from "../../libs/MongoDB";
+import http from 'http';
 
 
 class SessionModel {
@@ -69,7 +69,7 @@ class SessionModel {
         }
     }
 
-    static async listenSession(io: Server) {
+    static async listenSession(io: http.Server) {
         try {
             console.log("Ejecutado")
             const model = mongoose.model(this.collection, this.sessionSchema);

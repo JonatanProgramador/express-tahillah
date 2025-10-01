@@ -47,7 +47,7 @@ class SecurityLevelsMiddle extends Middleware_1.default {
                 break;
         }
         //recuperamos el nivel de seguridad de la ruta
-        let route = Routers_1.default.find((value) => req.path.toLocaleLowerCase() === value.url.toLocaleLowerCase());
+        let route = Routers_1.default.find((value) => req.path.toLocaleLowerCase() === value.url.toLocaleLowerCase() && req.method.toLocaleLowerCase() === value.method.toLocaleLowerCase());
         if (route === undefined) {
             const id = req.path.split("/").pop();
             Routers_1.default.forEach((value) => {

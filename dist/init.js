@@ -18,4 +18,3 @@ if (process.env.DEVELOP === "true") {
 else {
     app.listen(process.env.PORT ? Number.parseInt(process.env.PORT) : 3000, () => { console.log("Modo producion"); });
 }
-exports.default = app;

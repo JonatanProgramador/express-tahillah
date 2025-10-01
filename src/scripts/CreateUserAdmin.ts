@@ -1,21 +1,28 @@
 import UserInterface from "../interfaces/UserInterface";
+import MongoDB from "../libs/MongoDB";
 import UserModel from "../models/mongoDB/UserModel";
 import bcrypt from 'bcrypt';
-import dotenv from "dotenv";
 
 
 async function createUserAdmin() {
 
     const user = {
-        name:"",
-        password:await bcrypt.hash("",10),
-        rol:"admin"
+        name: "",
+        password: "",
+        rol: "admin"
     };
 
-    const result = await UserModel.createRow(user as UserInterface);
+    if (process.argv[2] && process.argv[3]) {
+        await MongoDB.connectDB();
+        user.name=process.argv[2];
+        user.password=await bcrypt.hash(process.argv[3], 10);
+        const result = await UserModel.createRow(user as UserInterface);
 
-    console.log(result?"Usuario admin creado":"Error al crear el usuario admin");
+        console.log(result ? "Usuario admin creado" : "Error al crear el usuario admin");
+        await MongoDB.desconnectDB();
+    } else {
+        console.log("Error en los parametros");
+    }
 }
 
-dotenv.config();
 createUserAdmin();

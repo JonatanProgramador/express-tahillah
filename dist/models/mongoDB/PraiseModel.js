@@ -54,7 +54,7 @@ class PraiseModel {
             try {
                 const model = mongoose_1.default.model(this.collection, this.praiseSchema);
                 const result = yield model.create(praise);
-                return result._id.toString() !== '';
+                return result._id.toString();
             }
             catch (error) {
                 if (error instanceof mongoose_1.mongo.MongoServerSelectionError) {
@@ -62,7 +62,7 @@ class PraiseModel {
                     if (MongoDB_1.default.reconnectDB === null)
                         MongoDB_1.default.init();
                 }
-                return false;
+                return null;
             }
         });
     }

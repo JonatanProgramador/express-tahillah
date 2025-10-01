@@ -18,7 +18,7 @@ if (process.env.DEVELOP === "true") {
   app.listen(process.env.PORT ? Number.parseInt(process.env.PORT) : 3000, () => { console.log("Modo producion") });
 }
 
-export default app;
+
 
 
 

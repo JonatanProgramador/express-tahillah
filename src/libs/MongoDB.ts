@@ -2,7 +2,8 @@ import mongoose from "mongoose";
 import SessionModel from "../models/mongoDB/SessionModel";
 import { Server } from "socket.io";
 import http from 'http';
-import app from "../init";
+import app from "../server";
+import { Application } from "express";
 
 class MongoDB {
 
@@ -30,14 +31,19 @@ class MongoDB {
         }
     }
 
-    static async startListers(app:http.Server<typeof http.IncomingMessage, typeof http.ServerResponse>) {
+    static async desconnectDB() {
+        await mongoose.disconnect();
+    }
+
+    static async startListers(server:Application) {
         console.log("se ha conectado a la db, iniciando listers");
+        const app = http.createServer(server);
         const io = new Server(app, {
           cors: {
             origin: process.env.ORIGIN_CORS,
           }
         });
-        await SessionModel.listenSession(io);
+        await SessionModel.listenSession(app);
     }
 
 

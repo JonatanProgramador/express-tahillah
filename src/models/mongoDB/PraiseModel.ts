@@ -24,17 +24,17 @@ class PraiseModel {
 
     private static readonly collection = 'praises';
 
-    static async createRow(praise: PraiseInterface): Promise<boolean> {
+    static async createRow(praise: PraiseInterface): Promise<String|null> {
         try {
             const model = mongoose.model(this.collection, this.praiseSchema);
             const result = await model.create(praise);
-            return result._id.toString() !== '';
+            return result._id.toString();
         } catch (error) { 
              if(error instanceof mongo.MongoServerSelectionError) {
                 console.log("No hay conexión");
                 if(MongoDB.reconnectDB === null)MongoDB.init();
             }
-            return false;
+            return null;
         }
     }
 
