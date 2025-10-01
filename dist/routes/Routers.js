@@ -26,5 +26,6 @@ const Routers = [
     { url: '/login', method: 'get', callBack: UserController_1.default.login, securityLevel: 0 },
     { url: '/islogin', method: 'get', callBack: UserController_1.default.isLogin, securityLevel: 0 },
     { url: '/logout', method: 'get', callBack: UserController_1.default.logout, securityLevel: 1 },
+    { url: '/user/search', method: 'post', callBack: UserController_1.default.search, securityLevel: 3 },
 ];
 exports.default = Routers;

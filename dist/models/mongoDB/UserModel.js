@@ -140,6 +140,23 @@ class UserModel {
             }
         });
     }
+    static find(key, value, precise) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const model = mongoose_1.default.model(this.collection, this.userSchema);
+                const result = yield model.find({ [key]: precise ? value : { $regex: value, $options: "i" } });
+                return result;
+            }
+            catch (error) {
+                if (error instanceof mongoose_1.mongo.MongoServerSelectionError) {
+                    console.log("No hay conexión");
+                    if (MongoDB_1.default.reconnectDB === null)
+                        MongoDB_1.default.init();
+                }
+                return null;
+            }
+        });
+    }
 }
 UserModel.userSchema = new mongoose_1.Schema({
     name: String,

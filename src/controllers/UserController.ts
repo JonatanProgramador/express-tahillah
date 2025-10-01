@@ -5,9 +5,21 @@ import UserInterface from "../interfaces/UserInterface";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import UserResourcer from "../resourcers/UserResourcer";
+import SearchRequest from "../request/SearchRequest";
 
 
 class UserController {
+
+    static async search(req: Request, res: Response) {
+        const validate = SearchRequest.validate(req.body);
+        if (validate.success) {
+            const users = await UserModel.find(validate.data.key, validate.data.value, validate.data.precise);
+            users === null ? res.status(500).send("Error en el servidor") : res.json(UserResourcer.format(users));
+        } else {
+            res.status(400).send("datos invalidos");
+        }
+
+    }
 
     static async delete(req: Request, res: Response) {
         const rowDelete = await UserModel.delete(req.params.id);

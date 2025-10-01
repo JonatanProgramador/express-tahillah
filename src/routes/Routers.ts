@@ -26,6 +26,7 @@ const Routers = [
     { url: '/login', method: 'get', callBack: UserController.login, securityLevel: 0},
     { url: '/islogin', method: 'get', callBack: UserController.isLogin, securityLevel: 0 },
     { url: '/logout', method: 'get', callBack: UserController.logout, securityLevel: 1 },
+    { url: '/user/search', method: 'post', callBack: UserController.search, securityLevel: 3 },
 ]
 
 

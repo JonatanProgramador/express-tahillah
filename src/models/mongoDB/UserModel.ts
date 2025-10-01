@@ -89,6 +89,20 @@ class UserModel {
             return null;
         }
     }
+
+    static async find(key: string, value: string, precise: boolean): Promise<UserInterface[]|null> {
+            try {
+                const model = mongoose.model(this.collection, this.userSchema);
+                const result: UserInterface[] = await model.find({ [key]: precise ? value : { $regex: value, $options: "i" } });
+                return result;
+            } catch (error) {
+                 if(error instanceof mongo.MongoServerSelectionError) {
+                    console.log("No hay conexión");
+                    if(MongoDB.reconnectDB === null)MongoDB.init();
+                }
+                return null;
+            }
+        }
 }
 
 export default UserModel;

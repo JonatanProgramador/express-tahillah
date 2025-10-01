@@ -17,7 +17,20 @@ const UserModel_1 = __importDefault(require("../models/mongoDB/UserModel"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const UserResourcer_1 = __importDefault(require("../resourcers/UserResourcer"));
+const SearchRequest_1 = __importDefault(require("../request/SearchRequest"));
 class UserController {
+    static search(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const validate = SearchRequest_1.default.validate(req.body);
+            if (validate.success) {
+                const users = yield UserModel_1.default.find(validate.data.key, validate.data.value, validate.data.precise);
+                users === null ? res.status(500).send("Error en el servidor") : res.json(UserResourcer_1.default.format(users));
+            }
+            else {
+                res.status(400).send("datos invalidos");
+            }
+        });
+    }
     static delete(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const rowDelete = yield UserModel_1.default.delete(req.params.id);
