@@ -49,7 +49,7 @@ class UserController {
             if (!existsUser) {
                 newUser.password = await bcrypt.hash(newUser.password, 10);
                 const result = await UserModel.createRow(newUser);
-                result ? res.status(201).send("Se ha creado el usuario") : res.status(500).send("Error en el servidor");
+                result ? res.status(201).json(result) : res.status(500).send("Error en el servidor");
             } else {
                 existsUser === null ? res.status(500).send("Error en el servidor") : res.status(409).send("El nombre ya existe");
             }

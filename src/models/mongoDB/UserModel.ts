@@ -17,7 +17,6 @@ class UserModel {
          try {
             const model = mongoose.model(this.collection, this.userSchema);
             const result = await model.findByIdAndDelete(id);
-            console.log(result);
             return result?200:404;
         } catch (error) {
              if(error instanceof mongo.MongoServerSelectionError) {
@@ -43,7 +42,7 @@ class UserModel {
         }
     }
 
-    static async createRow(user: UserInterface): Promise<boolean> {
+    static async createRow(user: UserInterface): Promise<string|null> {
         try {
             if (!user.rol) {
                 console.log("rol vacio asignandole un valor por defecto");
@@ -51,13 +50,13 @@ class UserModel {
             }
             const model = mongoose.model(this.collection, this.userSchema);
             const result = await model.create(user);
-            return result._id && result._id.toString() ? true : false;
+            return result._id.toString();
         } catch (error) {
             if (error instanceof mongo.MongoServerSelectionError) {
                 console.log("No hay conexión");
                 if (MongoDB.reconnectDB === null) MongoDB.init();
             }
-            return false;
+            return null;
         }
     }
 

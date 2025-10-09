@@ -11,9 +11,7 @@ function setCookie(coo:string) {cookie = coo};
 
 async function login(us?:string, pas?:string) {
     if (cookie === "" || cookie === undefined) {
-        us = us??user;
-        pas = pas??pass;
-        const credentials = Buffer.from(us + ":" + pas).toString('base64');
+        const credentials = Buffer.from((us??user) + ":" + (pas??pass)).toString('base64');
         const login = await request(server).get('/login').set('Authorization', 'Basic ' + credentials);
         cookie = login.headers['set-cookie'];
         return login.statusCode;
