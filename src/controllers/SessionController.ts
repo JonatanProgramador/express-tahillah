@@ -6,6 +6,26 @@ import SessionModel from "../models/mongoDB/SessionModel";
 
 class SessionController {
 
+    static async delete(req: Request, res: Response): Promise<void> {
+        const session = await SessionModel.find("idUser", req.body.idUser, true);
+        if(session) {
+            const del = await SessionModel.delete(session[0]._id);
+            switch (del) {
+            case 200:
+                res.send("Se ha eliminado la sesión");
+                break;
+            case 404:
+                res.status(404).send("No se ha encontrado resultados");
+                break;
+            default:
+                res.status(500).send("Error del servidor");
+                break;
+        }
+        } else {
+             res.status(404).send("No se ha encontrado resultados");
+        }
+    }
+
     static async create(req: Request, res: Response): Promise<void> {
         const sessionValidate = SessionRequest.validate(req.body);
         if (sessionValidate.success) {

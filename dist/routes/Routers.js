@@ -17,6 +17,7 @@ const Routers = [
     //Rutas de sesiones.
     { url: '/session', method: 'post', callBack: SessionController_1.default.create, securityLevel: 2 },
     { url: '/session', method: 'patch', callBack: SessionController_1.default.update, securityLevel: 2 },
+    { url: '/session', method: 'delete', callBack: SessionController_1.default.delete, securityLevel: 2 },
     { url: '/session/searchByUser', method: 'get', callBack: SessionController_1.default.searchByUser, securityLevel: 2 },
     { url: '/session/:id', method: 'get', callBack: SessionController_1.default.getById, securityLevel: 0 },
     //Rutas de usuario

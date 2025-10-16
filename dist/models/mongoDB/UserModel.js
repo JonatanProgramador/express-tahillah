@@ -53,7 +53,6 @@ class UserModel {
             try {
                 const model = mongoose_1.default.model(this.collection, this.userSchema);
                 const result = yield model.findByIdAndDelete(id);
-                console.log(result);
                 return result ? 200 : 404;
             }
             catch (error) {
@@ -94,7 +93,7 @@ class UserModel {
                 }
                 const model = mongoose_1.default.model(this.collection, this.userSchema);
                 const result = yield model.create(user);
-                return result._id && result._id.toString() ? true : false;
+                return result._id.toString();
             }
             catch (error) {
                 if (error instanceof mongoose_1.mongo.MongoServerSelectionError) {
@@ -102,7 +101,7 @@ class UserModel {
                     if (MongoDB_1.default.reconnectDB === null)
                         MongoDB_1.default.init();
                 }
-                return false;
+                return null;
             }
         });
     }

@@ -49,6 +49,25 @@ const mongoose_1 = __importStar(require("mongoose"));
 const mongoose_2 = require("mongoose");
 const MongoDB_1 = __importDefault(require("../../libs/MongoDB"));
 class SessionModel {
+    static delete(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const model = mongoose_1.default.model(this.collection, this.sessionSchema);
+                const result = yield model.findByIdAndDelete(id);
+                return 200;
+            }
+            catch (error) {
+                if (error instanceof mongoose_2.mongo.MongoServerSelectionError) {
+                    console.log("No hay conexión");
+                    if (MongoDB_1.default.reconnectDB === null)
+                        MongoDB_1.default.init();
+                }
+                if (error instanceof mongoose_1.default.Error.CastError)
+                    return 404;
+                return 500;
+            }
+        });
+    }
     static createRow(session) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

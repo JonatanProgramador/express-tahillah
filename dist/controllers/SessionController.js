@@ -15,6 +15,28 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const SessionRequest_1 = __importDefault(require("../request/SessionRequest"));
 const SessionModel_1 = __importDefault(require("../models/mongoDB/SessionModel"));
 class SessionController {
+    static delete(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const session = yield SessionModel_1.default.find("idUser", req.body.idUser, true);
+            if (session) {
+                const del = yield SessionModel_1.default.delete(session[0]._id);
+                switch (del) {
+                    case 200:
+                        res.send("Se ha eliminado la sesión");
+                        break;
+                    case 404:
+                        res.status(404).send("No se ha encontrado resultados");
+                        break;
+                    default:
+                        res.status(500).send("Error del servidor");
+                        break;
+                }
+            }
+            else {
+                res.status(404).send("No se ha encontrado resultados");
+            }
+        });
+    }
     static create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const sessionValidate = SessionRequest_1.default.validate(req.body);

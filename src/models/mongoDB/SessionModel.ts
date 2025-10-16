@@ -14,6 +14,21 @@ class SessionModel {
 
     private static readonly collection = 'sessions';
 
+    static async delete(id:String) {
+         try {
+            const model = mongoose.model(this.collection, this.sessionSchema);
+            const result = await model.findByIdAndDelete(id);
+            return 200;
+        } catch (error) {
+             if(error instanceof mongo.MongoServerSelectionError) {
+                console.log("No hay conexión");
+                if(MongoDB.reconnectDB === null)MongoDB.init();
+            }
+             if(error instanceof mongoose.Error.CastError) return 404;
+            return 500;
+        }
+    }
+
     static async createRow(session: SessionInterface): Promise<boolean> {
         try {
             const model = mongoose.model(this.collection, this.sessionSchema);
