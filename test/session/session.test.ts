@@ -2,6 +2,9 @@ import MongoDB from "../../src/libs/MongoDB";
 import { login } from "../user/testLoginUser";
 import { logout } from "../user/testLogoutUser";
 import { testCreateSession } from "./testCreateSession";
+import { testDeleteSession } from "./testDeleteSession";
+import { testGetSessionById } from "./testGetSessionById";
+import { testSearchSessionByUser } from "./testSearchSessionByUser";
 
 
 beforeAll(async () => {
@@ -16,6 +19,12 @@ afterAll(async () => {
 
 describe("Endpoint de user", () => {
 
-    describe("Login", testCreateSession);
+    describe("Create Session", testCreateSession);
+
+    describe("Delete Session", testDeleteSession);
+
+    describe("Get Session By Id", testGetSessionById);
+
+    describe("Search Session By User", testSearchSessionByUser);
 
 });

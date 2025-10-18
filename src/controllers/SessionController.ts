@@ -8,7 +8,7 @@ class SessionController {
 
     static async delete(req: Request, res: Response): Promise<void> {
         const session = await SessionModel.find("idUser", req.body.idUser, true);
-        if(session) {
+        if(session && session.length > 0) {
             const del = await SessionModel.delete(session[0]._id);
             switch (del) {
             case 200:
